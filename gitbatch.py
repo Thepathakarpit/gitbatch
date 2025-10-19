@@ -56,9 +56,8 @@ def call_gemini_api(repo_url, api_key, repo_tree, readme_content):
     """
     Calls the Gemini API with repo tree and README content to generate a batch file.
     """
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={api_key}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-latest:generateContent?key={api_key}"
 
-    # Payload for the API
     payload = {
         "contents": [
             {
@@ -69,20 +68,17 @@ def call_gemini_api(repo_url, api_key, repo_tree, readme_content):
         ]
     }
 
-    # Headers
     headers = {
         'Content-Type': 'application/json'
     }
 
     try:
-        # Send POST request to the Gemini API
+
         response = requests.post(url, headers=headers, data=json.dumps(payload))
 
-        # Check if the request was successful
         if response.status_code == 200:
             result = response.json()
 
-            # Extract the generated text from the response
             if 'candidates' in result and len(result['candidates']) > 0:
                 return result['candidates'][0]['content']['parts'][0]['text']
             else:
